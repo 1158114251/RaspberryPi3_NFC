@@ -1,4 +1,20 @@
-wifi_nfc : wifi_nfc.c
-	gcc wifi_nfc.c -o wifi_nfc -l nfc
-clean: 
-	rm -rf wifi_nfc
+CC=gcc
+CFGLASS=-Wall -g -c -O2
+
+all:send_nfc_wifi  recv_nfc_wifi
+
+send_nfc_wifi:send_nfc_wifi.o
+	$(CC) $< -l nfc -o $@
+
+recv_nfc_wifi:recv_nfc_wifi.o
+	$(CC) $< -l nfc -o $@
+
+%.o:%.c
+	$(CC) $(CFGLASS) $< -o $@
+
+.PHONY:
+	clean
+
+clean:
+	$(RM) -rf *.o  send_nfc_wifi  recv_nfc_wifi
+
