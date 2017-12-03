@@ -29,8 +29,9 @@ main(int argc, const char *argv[])
 {
   nfc_target   nt;
   uint8_t  abtRx[MAX_FRAME_LEN];
-  uint8_t  abtTx[] = "P2P transmit Sample--SmartFire.cn";
+  uint8_t  abtTx[] = "what is the wifi passwd ?";
 
+  int res;
   if (argc > 1) {
     printf("Usage: %s\n", argv[0]);
     return EXIT_FAILURE;
@@ -53,14 +54,12 @@ main(int argc, const char *argv[])
     goto error;
   }
 
-  if (nfc_initiator_select_dep_target(pnd, NDM_PASSIVE, NBR_212, NULL, &nt, 1000) < 0) {
+  if (nfc_initiator_select_dep_target(pnd, NDM_PASSIVE, NBR_212, NULL, &nt, 0) < 0) {
     nfc_perror(pnd, "nfc_initiator_select_dep_target");
     goto error;
   }
   //print_nfc_target(nt, false);
 
-  printf("Sending: %s\n", abtTx);
-  int res;
   if ((res = nfc_initiator_transceive_bytes(pnd, abtTx, sizeof(abtTx), abtRx, sizeof(abtRx), 0)) < 0) {
     nfc_perror(pnd, "nfc_initiator_transceive_bytes");
     goto error;

@@ -28,8 +28,9 @@ main(int argc, const char *argv[])
 {
   uint8_t  abtRx[MAX_FRAME_LEN];
   int  szRx;
-  uint8_t  abtTx[] = "Hello Mars!";
-
+  uint8_t  abtTx[200] ={0};
+  uint8_t * point_to_all =abtTx;
+  FILE *fp;
   nfc_context *context;
   nfc_init(&context);
 #define MAX_DEVICE_COUNT 2
@@ -82,10 +83,26 @@ main(int argc, const char *argv[])
 
   signal(SIGINT, stop_dep_communication);
 
-  printf("NFC device will now act as: ");
+  printf("NFC device will now act as: \n");
   //print_nfc_target(nt, false);
 
 loop_wait:
+  
+  point_to_all =abtTx;
+  fp =fopen ("passwd.txt","rb");
+  if(!fp)
+ {
+  perror("open file fail\n");
+}   
+   fgets((char *)abtTx,100,fp);
+   while((*point_to_all)!='\n') 
+{
+    point_to_all++;
+}
+  fgets((char *)point_to_all,100,fp);
+  fclose(fp);
+  printf("______%s",abtTx);
+
   printf("Waiting for initiator request...\n");
   if ((szRx = nfc_target_init(pnd, &nt, abtRx, sizeof(abtRx), 0)) < 0) {
     nfc_perror(pnd, "nfc_target_init");
@@ -105,8 +122,8 @@ loop_wait:
     nfc_perror(pnd, "nfc_target_send_bytes");
     goto error;
   }
-  printf("Data sent.\n");
-  usleep(1000);
+  printf("passwd have send ok.\n");
+  sleep(1);
   goto loop_wait;
 
 error:
