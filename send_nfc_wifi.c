@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <signal.h>
-
+#include <unistd.h>
 #include <nfc/nfc.h>
 
 #include "utils/nfc-utils.h"
@@ -85,6 +85,7 @@ main(int argc, const char *argv[])
   printf("NFC device will now act as: ");
   //print_nfc_target(nt, false);
 
+loop_wait:
   printf("Waiting for initiator request...\n");
   if ((szRx = nfc_target_init(pnd, &nt, abtRx, sizeof(abtRx), 0)) < 0) {
     nfc_perror(pnd, "nfc_target_init");
@@ -105,6 +106,8 @@ main(int argc, const char *argv[])
     goto error;
   }
   printf("Data sent.\n");
+  usleep(1000);
+  goto loop_wait;
 
 error:
   nfc_close(pnd);
