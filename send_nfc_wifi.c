@@ -99,6 +99,7 @@ loop_wait:
 {
     point_to_all++;
 }
+  point_to_all++;
   fgets((char *)point_to_all,100,fp);
   fclose(fp);
 
