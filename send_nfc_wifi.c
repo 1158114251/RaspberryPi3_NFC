@@ -101,7 +101,6 @@ loop_wait:
 }
   fgets((char *)point_to_all,100,fp);
   fclose(fp);
-  printf("______%s",abtTx);
 
   printf("Waiting for initiator request...\n");
   if ((szRx = nfc_target_init(pnd, &nt, abtRx, sizeof(abtRx), 0)) < 0) {
@@ -115,7 +114,6 @@ loop_wait:
     goto error;
   }
   abtRx[(size_t) szRx] = '\0';
-  printf("Received: %s\n", abtRx);
 
   printf("Sending: %s\n", abtTx);
   if (nfc_target_send_bytes(pnd, abtTx, sizeof(abtTx), 0) < 0) {
