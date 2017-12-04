@@ -114,32 +114,31 @@ main(int argc, const char *argv[])
   abtRx[res] = 0;
   printf("Received: %s\n", abtRx);
   while(*str_start_ ++!=':');
-         str_start_save=str_start_+1;
+         str_start_save=str_start_;
 
   while(*str_start_!='\n')
   {
      str_start_++;
   }
    *str_start_ ='\0';
- printf("+++++%s\n",str_start_save);
+  
+  while(*str_start_++!=':');
+  str_end_save=str_start_;
+  str_end_save[strlen(str_end_save)-1]='\0';  
 
-  while(*str_start_++!=":");
-  str_end_save=str_start_+1;
-
-sprintf(tmp,"echo \"network={\" >>1.txt");
+  sprintf(tmp,"echo \"network={\" >>/etc/wpa_supplicant/wpa_supplicant.conf");
   system(tmp);
 
-  sprintf(tmp,"echo \"ssid=\\\"%s\\\"\" >>1.txt","ssid");
+  sprintf(tmp,"echo \"ssid=\\\"%s\\\"\" >>/etc/wpa_supplicant/wpa_supplicant.conf",str_start_save);
   system(tmp);
 
-  sprintf(tmp,"echo \"psk=\\\"%s\\\"\" >>1.txt","ccc");
+  sprintf(tmp,"echo \"psk=\\\"%s\\\"\" >>/etc/wpa_supplicant/wpa_supplicant.conf",str_end_save);
   system(tmp);
 
  
-  sprintf(tmp,"echo \"}\" >>1.txt");
+  sprintf(tmp,"echo \"}\" >>/etc/wpa_supplicant/wpa_supplicant.conf");
   system(tmp);
   system("killall wpa_supplicant");
-  system("cp /etc/wpa_supplicant/wpa_supplicant.conf.bak  /etc/wpa_supplicant/wpa_supplicant.conf");
   system("wpa_supplicant -B -i wlan0 -c /etc/wpa_supplicant/wpa_supplicant.conf");
   
   ret  = _System(cmd, a8Result, sizeof(a8Result));  
